@@ -618,6 +618,9 @@ body {
 .card__btn-favorite--selected {
   background-color: #8269ff
 }
+.card__btn-favorite--no-selected {
+  background-color: #e8e8e8;
+}
 .card__btn {
   display: flex;
   align-items: center;

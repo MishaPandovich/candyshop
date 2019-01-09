@@ -130,49 +130,24 @@ for (var i = 0; i < GOODS__COUNT; i++) {
 parentElement.appendChild(fragment);
 
 /*
-<template id="card">
-    <article class="catalog__card card card--in-stock" tabindex="0">
-      <header class="card__header">
-        <h3 class="card__title">Чесночные сливки</h3>
-        <img class="card__img" src="img/cards/ice-garlic.jpg" alt="Мороженное со вкусом чеснока" width="265" height="264">
-        <span class="card__price">230
-          <span class="card__currency">₽</span>
-          <span class="card__weight">/ 70 Г</span>
-        </span>
-      </header>
-      <div class="card__main">
-        <div class="card__rating">
-          <button class="card__btn-composition" type="button">Состав</button>
-          <div class="card__stars stars">
-            <span class="stars__rating stars__rating--five">Рейтинг: 5 звёзд</span>
-            <span class="star__count">(300)</span>
-          </div>
-        </div>
-        <div class="card__composition card__composition--hidden">
-          <p class="card__characteristic">Без сахара. 133 ккал</p>
-          <p class="card__composition-list">Молоко, сливки, вода, арамотизатор бекона, пищевой краситель.</p>
-        </div>
-        <p class="card__btns-wrap">
-          <a class="card__btn-favorite" href="#">Добавить в избранное</a>
-          <a class="card__btn" href="#">Добавить +1</a>
-        </p>
-      </div>
-    </article>
-  </template>
-*/
-
+1. найти элемент +
+2. нажатие на него +
+3. определить что за элемент был нажат +
+4. добавить элемент в корзину
+5. если есть в корзине, то увечить*/
 
 /*функция для получения обьектов*/
-function GetObjectOrder() {
-  this.name = getRandomElement(GOODS__NAMES);
-  this.picture = getRandomElement(GOODS__IMG);
-  this.price = getRandomInteger(100, 1500);
+function GetObjectOrder(i) {
+  this.name = goods[i].name;
+  this.picture = goods[i].picture;
+  this.price = goods[i].price;
+  this.orderedAmount = 1;
 }
 
 var goodsOrder = [];
 function getArrOrder(){
   for (var i = 0; i < GOODS__COUNT; i++) {
-    goodsOrder[i] = new GetObjectOrder();
+    goodsOrder[i] = new GetObjectOrder(i);
   }
 
   return goodsOrder;
@@ -183,50 +158,24 @@ getArrOrder();
 var goodsOrderTemplate = document.querySelector('#card-order').content.querySelector('.card-order');
 
 /*создаем товары по по шаблону*/
-var createGoodsOrder = function(goods) {
-  var goodsElement = goodsOrderTemplate.cloneNode(true);
-
+var goodsElement = goodsOrderTemplate.cloneNode(true);
+var createGoodsOrder = function(goods, number) {
   goodsElement.querySelector('.card-order__title').textContent = goods.name;
   goodsElement.querySelector('.card-order__img').src = goods.picture;
   goodsElement.querySelector('.card-order__img').alt = goods.name;
   goodsElement.querySelector('.card-order__price').textContent = goods.price;
-
+  goodsElement.querySelector('.card-order__count').value = goods.orderedAmount;
 
   return goodsElement;
 }
-
+var parent = document.querySelector('.goods__card-empty');
 /*создаем фрагмент*/
 var fragmentOrder = document.createDocumentFragment();
-for (var j = 0; j < GOODS__COUNT; j++) {
-  fragmentOrder.appendChild(createGoodsOrder(goods[j]));
+for (var i = 0; i < GOODS__COUNT; i++) {
+  fragment.appendChild(createGoodsOrder(goods[i]));
 }
 
-var parentElementOrder = document.querySelector('.goods__cards');
-parentElementOrder.appendChild(fragmentOrder);
+parent.appendChild(fragment);
 
-/*Удалите у блока goods__cards класс goods__cards--empty и скройте при этом блок goods__card-empty*/
-parentElementOrder.classList.remove('goods__cards--empty');
-document.querySelector('.goods__card-empty').classList.add('visually-hidden');
 
-/*
-<template id="card-order">
-  <article class="goods_card card-order">
-    <a href="#" class="card-order__close">Удалить товар</a>
-    <header class="card-order__header">
-      <h3 class="card-order__title">Нинзя-удар васаби</h3>
-      <img src="img/cards/gum-wasabi.jpg" alt="Жевачка со вкусом васаби" class="card-order__img" width="265" height="264">
-    </header>
-    <div class="card-order__main">
-      <p class="card-order__price">660 ₽</p>
-      <div class="card-order__amount">
-        <button type="button" class="card-order__btn card-order__btn--decrease">уменьшить</button>
-        <label class="card-order__label">
-          <span class="visually-hidden">Количество</span>
-          <input class="card-order__count" name="gum-wasabi" value="2" type="text" id="card-order__gum-wasabi">
-        </label>
-        <button type="button" class="card-order__btn card-order__btn--increase">увеличить</button>
-      </div>
-    </div>
-  </article>
-</template>
-*/
+
